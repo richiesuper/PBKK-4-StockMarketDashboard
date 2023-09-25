@@ -1,0 +1,675 @@
+﻿<Window x:Class="StockMarketDashboard.MainWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:MetroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StockMarketDashboard"
+        mc:Ignorable="d" Height="600" Width="1024" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2" Grid.Row="0" MouseDown="titleBar_MouseDown">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="#FFAEE6DA"/>
+                    <GradientStop Color="#FFC36AB3" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Label FontFamily="MV Boli">Richie Seputro - 5025211213</Label>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnMinimize" FontFamily="Courier New" Width="25" Height="25" Click="btnMinimize_Click" Background="#FFA2F16E" Padding="0" Content="{materialDesign:PackIcon Kind=WindowMinimize}" Foreground="Black"/>
+                <Button x:Name="btnMaximize" FontFamily="Courier New" Width="25" Height="25" Click="btnMaximize_Click" Background="#FFECE65F" Padding="0" Content="{materialDesign:PackIcon Kind=WindowMaximize}" Foreground="Black"/>
+                <Button x:Name="btnExit" FontFamily="Courier New" Width="25" Height="25" Click="btnExit_Click" Background="#FFF74747" Padding="0" Content="{materialDesign:PackIcon Kind=WindowClose}" Foreground="Black"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="0" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFB8DEDD" Offset="0"/>
+                        <GradientStop Color="#FF4BC8C6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <TextBlock FontFamily="Ink Free" FontSize="32" TextWrapping="Wrap" TextAlignment="Center" Text="Stock Market Dashboard" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF6AC4CA" Offset="0.003"/>
+                        <GradientStop Color="#FFCA95F1" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70" />
+                    <!-- Dashboard -->
+                    <RowDefinition Height="70" />
+                    <!-- Portfolio -->
+                    <RowDefinition Height="70" />
+                    <!-- Market -->
+                    <RowDefinition Height="70" />
+                    <!-- Profile -->
+                    <RowDefinition Height="70" />
+                    <!-- Settings -->
+                </Grid.RowDefinitions>
+                <Button x:Name="btnDashboard" Grid.Row="0" Background="#FFF15A5A" Margin="10" FontSize="18" FontFamily="Comic Sans MS" Click="btnDashboard_Click" Foreground="#DD000000">Dashboard</Button>
+                <materialDesign:PackIcon Grid.Row="0" VerticalAlignment="Center" Margin="25 0 0 0" Kind="ViewDashboard"/>
+                <Button x:Name="btnPortfolio" Grid.Row="1" Background="#FFEFEA69" Margin="10" FontSize="18" FontFamily="Comic Sans MS" Click="btnPortfolio_Click" Foreground="#DD000000">Portfolio</Button>
+                <materialDesign:PackIcon Grid.Row="1" VerticalAlignment="Center" Margin="25 0 0 0" Kind="ReportFinance"/>
+                <Button x:Name="btnMarket" Grid.Row="2" Background="#FF63DE38" Margin="10" FontSize="18" FontFamily="Comic Sans MS" Click="btnMarket_Click" Foreground="#DD000000">Market</Button>
+                <materialDesign:PackIcon Grid.Row="2" VerticalAlignment="Center" Margin="25 0 0 0" Kind="Marketplace"/>
+                <Button x:Name="btnProfile" Grid.Row="3" Background="#FF71B7ED" Margin="10" FontSize="18" FontFamily="Comic Sans MS" Click="btnProfile_Click" Foreground="#DD000000">Profile</Button>
+                <materialDesign:PackIcon Grid.Row="3" VerticalAlignment="Center" Margin="25 0 0 0" Kind="FaceMaleProfile"/>
+                <Button x:Name="btnSettings" Grid.Row="4" Background="#FF905BD4" Margin="10" FontSize="18" FontFamily="Comic Sans MS" Click="btnSettings_Click" Foreground="#DD000000">Settings</Button>
+                <materialDesign:PackIcon Grid.Row="4" VerticalAlignment="Center" Margin="25 0 0 0" Kind="Settings"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" x:Name="gridDashboard">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="300" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="300" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="300" />
+                    </Grid.RowDefinitions>
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFDEAFA4"/>
+                            <GradientStop Color="#FFDC4B20" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Label Grid.Row="0" FontFamily="Comic Sans MS" FontSize="24" Margin="50 0 0 0">Your Portfolio</Label>
+                    <UniformGrid Grid.Row="1" Rows="1" Columns="4" VerticalAlignment="Top">
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="1"  Rows="1" Columns="4" VerticalAlignment="Top">
+                        <TextBlock Height="200" Margin="10" Text="Invested Capital: $15,000,000" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="Investment Value: $13,000,000" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="Return on Investment: ($2,000,000)" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="RoI Percentage: (13.33%)" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="1" Rows="1" Columns="4" VerticalAlignment="Top">
+                        <materialDesign:PackIcon Kind="Dollar" VerticalAlignment="Top" Width="100" Height="100" HorizontalAlignment="Center" Foreground="White" Margin="0 75 0 0"/>
+                        <materialDesign:PackIcon Kind="Gold" VerticalAlignment="Top" Width="100" Height="100" HorizontalAlignment="Center" Foreground="White" Margin="0 75 0 0"/>
+                        <materialDesign:PackIcon Kind="CashReturn" VerticalAlignment="Top" Width="100" Height="100" HorizontalAlignment="Center" Foreground="White" Margin="0 75 0 0"/>
+                        <materialDesign:PackIcon Kind="About" VerticalAlignment="Top" Width="100" Height="100" HorizontalAlignment="Center" Foreground="White" Margin="0 75 0 0"/>
+                    </UniformGrid>
+                    <Label Grid.Row="2" FontFamily="Comic Sans MS" FontSize="24" Margin="50 0 0 0">Stock Prices</Label>
+                    <UniformGrid Grid.Row="3" Rows="3" Columns="4" VerticalAlignment="Top">
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="3"  Rows="3" Columns="4" VerticalAlignment="Top">
+                        <TextBlock Height="200" Margin="10" Text="AAPL: $174.89" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="TSLA: $242.53" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="MSFT: $316.49" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="META: $298.11" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="AMZN: $130.36" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="NVDA: $423.32" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="GOOGL: $129.92" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="XOM: $115.09" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="ORCL: $108.50" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="AMD: $96.50" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="ACN: $318.00" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="VZ: $32.99" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="3" Rows="3" Columns="4" VerticalAlignment="Top">
+                        <materialDesign:PackIcon Kind="Apple" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 30 0 0"/>
+                        <materialDesign:PackIcon Kind="EvChargerTesla" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 30 0 0"/>
+                        <materialDesign:PackIcon Kind="Microsoft" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 30 0 0"/>
+                        <materialDesign:PackIcon Kind="Facebook" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 30 0 0"/>
+                        <materialDesign:PackIcon Kind="Package" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 35 0 0"/>
+                        <materialDesign:PackIcon Kind="Gpu" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 35 0 0"/>
+                        <materialDesign:PackIcon Kind="Google" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 35 0 0"/>
+                        <materialDesign:PackIcon Kind="OilBarrel" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 35 0 0"/>
+                        <materialDesign:PackIcon Kind="Database" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 45 0 0"/>
+                        <materialDesign:PackIcon Kind="Cpu64Bit" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 45 0 0"/>
+                        <materialDesign:PackIcon Kind="Internet" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 45 0 0"/>
+                        <materialDesign:PackIcon Kind="Telephone" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 45 0 0"/>
+                    </UniformGrid>
+                    <Label Grid.Row="4" FontFamily="Comic Sans MS" FontSize="24" Margin="50 0 0 0">Latest Stock News</Label>
+                    <UniformGrid Grid.Row="5" Rows="2" Columns="4" VerticalAlignment="Top">
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="5"  Rows="1" Columns="4" VerticalAlignment="Top">
+                        <TextBlock Height="150" Margin="10" Text="AAPL Goes Up in Value After a Huge Dip, Earning Investors Significant Gains." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="META Loses 8% of Its Value in a Single Night After Rumours of Insider Trading." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="GOOGL Opened at $129.92 Today, Beating Yesterday's Highest." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="ACN to Give Out Dividends to Investors Tomorrow." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="VZ Splits Its Stock in Half, Causing New Retail Investors to a Buying Spree." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="AMZN Closed at $125.65 After a Volatile Day." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="NVDA Price Soars Amid Global Chip Shortage" FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="MSFT Goes Down in Value As Investors Flock to AAPL." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </UniformGrid>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" x:Name="gridPortfolio">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="300" />
+                    </Grid.RowDefinitions>
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFEFFBAA"/>
+                            <GradientStop Color="#FFD7E216" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Label Grid.Row="0" FontFamily="Comic Sans MS" FontSize="24" Margin="50 0 0 0">Your Portfolio</Label>
+                    <UniformGrid Grid.Row="1" Rows="1" Columns="4" VerticalAlignment="Top">
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="1"  Rows="1" Columns="4" VerticalAlignment="Top">
+                        <TextBlock Height="200" Margin="10" Text="Invested Capital: $15,000,000" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="Investment Value: $13,000,000" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="Return on Investment: ($2,000,000)" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="RoI Percentage: (13.33%)" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="1" Rows="1" Columns="4" VerticalAlignment="Top">
+                        <materialDesign:PackIcon Kind="Dollar" VerticalAlignment="Top" Width="100" Height="100" HorizontalAlignment="Center" Foreground="White" Margin="0 75 0 0"/>
+                        <materialDesign:PackIcon Kind="Gold" VerticalAlignment="Top" Width="100" Height="100" HorizontalAlignment="Center" Foreground="White" Margin="0 75 0 0"/>
+                        <materialDesign:PackIcon Kind="CashReturn" VerticalAlignment="Top" Width="100" Height="100" HorizontalAlignment="Center" Foreground="White" Margin="0 75 0 0"/>
+                        <materialDesign:PackIcon Kind="About" VerticalAlignment="Top" Width="100" Height="100" HorizontalAlignment="Center" Foreground="White" Margin="0 75 0 0"/>
+                    </UniformGrid>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" x:Name="gridMarket">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="300" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="300" />
+                    </Grid.RowDefinitions>
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFCDEFBE"/>
+                            <GradientStop Color="#FF5CDA42" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Label Grid.Row="0" FontFamily="Comic Sans MS" FontSize="24" Margin="50 0 0 0">Stock Prices</Label>
+                    <UniformGrid Grid.Row="1" Rows="3" Columns="4" VerticalAlignment="Top">
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="1"  Rows="3" Columns="4" VerticalAlignment="Top">
+                        <TextBlock Height="200" Margin="10" Text="AAPL: $174.89" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="TSLA: $242.53" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="MSFT: $316.49" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="META: $298.11" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="AMZN: $130.36" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="NVDA: $423.32" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="GOOGL: $129.92" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="XOM: $115.09" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="ORCL: $108.50" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="AMD: $96.50" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="ACN: $318.00" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="200" Margin="10" Text="VZ: $32.99" FontFamily="Courier New" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="1" Rows="3" Columns="4" VerticalAlignment="Top">
+                        <materialDesign:PackIcon Kind="Apple" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 30 0 0"/>
+                        <materialDesign:PackIcon Kind="EvChargerTesla" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 30 0 0"/>
+                        <materialDesign:PackIcon Kind="Microsoft" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 30 0 0"/>
+                        <materialDesign:PackIcon Kind="Facebook" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 30 0 0"/>
+                        <materialDesign:PackIcon Kind="Package" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 35 0 0"/>
+                        <materialDesign:PackIcon Kind="Gpu" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 35 0 0"/>
+                        <materialDesign:PackIcon Kind="Google" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 35 0 0"/>
+                        <materialDesign:PackIcon Kind="OilBarrel" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 35 0 0"/>
+                        <materialDesign:PackIcon Kind="Database" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 45 0 0"/>
+                        <materialDesign:PackIcon Kind="Cpu64Bit" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 45 0 0"/>
+                        <materialDesign:PackIcon Kind="Internet" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 45 0 0"/>
+                        <materialDesign:PackIcon Kind="Telephone" VerticalAlignment="Top" Width="50" Height="50" HorizontalAlignment="Center" Foreground="White" Margin="0 45 0 0"/>
+                    </UniformGrid>
+                    <Label Grid.Row="2" FontFamily="Comic Sans MS" FontSize="24" Margin="0 50 0 0">Latest Stock News</Label>
+                    <UniformGrid Grid.Row="3" Rows="2" Columns="4" VerticalAlignment="Top">
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFC3ECBE"/>
+                                    <GradientStop Color="#FF84F566" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDEDB2"/>
+                                    <GradientStop Color="#FFE4E64C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10" >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEDB2B2"/>
+                                    <GradientStop Color="#FFF54E46" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Height="200" Margin="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFD2B2ED"/>
+                                    <GradientStop Color="#FFB12AE6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="5"  Rows="1" Columns="4" VerticalAlignment="Top">
+                        <TextBlock Height="150" Margin="10" Text="AAPL Goes Up in Value After a Huge Dip, Earning Investors Significant Gains." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="META Loses 8% of Its Value in a Single Night After Rumours of Insider Trading." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="GOOGL Opened at $129.92 Today, Beating Yesterday's Highest." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="ACN to Give Out Dividends to Investors Tomorrow." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="VZ Splits Its Stock in Half, Causing New Retail Investors to a Buying Spree." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="AMZN Closed at $125.65 After a Volatile Day." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="NVDA Price Soars Amid Global Chip Shortage" FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Height="150" Margin="10" Text="MSFT Goes Down in Value As Investors Flock to AAPL." FontFamily="Tahoma" FontSize="18" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </UniformGrid>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" x:Name="gridProfile">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#FFD7F1EC"/>
+                    <GradientStop Color="#FF2ACED2" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <materialDesign:PackIcon Kind="EmojiManProfile" Height="300" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center">Richie Seputro</Label>
+                    <Label FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center">5025211213</Label>
+                    <Label FontFamily="Ink Free" FontSize="32" HorizontalAlignment="Center">PBKK A - Gasal 2023-2024</Label>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" x:Name="gridSettings">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#FFE9DFEF"/>
+                    <GradientStop Color="#FF7748CC" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label FontFamily="Impact" FontSize="48" HorizontalAlignment="Center">FOR ILLUSTRATION PURPOSES ONLY!</Label>
+                    <Label FontFamily="Impact" FontSize="48" HorizontalAlignment="Center">REMEMBER TO ALWAYS GET ENOUGH SLEEP!</Label>
+                    <Label FontFamily="Impact" FontSize="48" HorizontalAlignment="Center">DON'T BECOME LIKE ME!</Label>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
